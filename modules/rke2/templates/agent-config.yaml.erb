@@ -1,5 +1,5 @@
 write-kubeconfig-mode: "0644"
 token: <%= scope.function_file(['/etc/rancher/rke2/token.txt']) %>
-server: https://<%= @server_ip %>:9345
+server: https://<%= @server1_ip %>:9345
 node-label:
   - "agent=true"

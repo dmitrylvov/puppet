@@ -1,6 +1,4 @@
 write-kubeconfig-mode: "0644"
-token: <%= scope.function_file(['/etc/rancher/rke2/token.txt']) %>
-server: https://<%= @server1_ip %>:9345
 tls-san:
   - <%= @vip %>
   - <%= @server1_ip %>
@@ -8,3 +6,5 @@ tls-san:
   - <%= @server3_ip %>
 node-label:
   - server=true
+disable:
+  - rke2-ingress-nginx
