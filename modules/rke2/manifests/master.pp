@@ -21,6 +21,14 @@ class rke2::master (
     group   => 'root',
   }
 
+  file { '/var/lib/rancher/rke2/server':
+    ensure => 'directory',
+    mode   => '0755',
+    owner  => 'root',
+    group  => 'root',
+    before => File['/var/lib/rancher/rke2/server/token'],
+  }
+
   # Ensure the token is also placed in the bootstrap location
   file { '/var/lib/rancher/rke2/server/token':
     ensure  => 'file',
@@ -28,6 +36,7 @@ class rke2::master (
     mode    => '0600',
     owner   => 'root',
     group   => 'root',
+    before  => Service['rke2-server'],
   }
 
   exec { 'systemd-reload':
