@@ -21,6 +21,21 @@ class rke2::server (
     group   => 'root',
   }
 
+  file { '/var/lib/rancher':
+    ensure => 'directory',
+    mode   => '0755',
+    owner  => 'root',
+    group  => 'root',
+  }
+
+  file { '/var/lib/rancher/rke2':
+    ensure  => 'directory',
+    mode    => '0755',
+    owner   => 'root',
+    group   => 'root',
+    require => File['/var/lib/rancher'],
+  }
+
   file { '/var/lib/rancher/rke2/server':
     ensure => 'directory',
     mode   => '0755',
