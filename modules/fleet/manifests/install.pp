@@ -33,21 +33,21 @@ class fleet::install (
   # IMPORTANT: Check if Fleet is already installed by checking for deployments
   exec { 'check_fleet_installation':
     command => '/bin/true',  # No-op command
-    onlyif  => "/usr/local/bin/kubectl get -n ${fleet_namespace} deployment fleet-controller 2>/dev/null",
+    onlyif  => "/usr/local/bin/kubectl --kubeconfig=/etc/rancher/rke2/rke2.yaml get -n ${fleet_namespace} deployment fleet-controller 2>/dev/null",
     require => Exec['helm_repo_update'],
   }
 
   # Install Fleet CRDs only if Fleet isn't already installed
   exec { 'install_fleet_crds':
-    command => "/usr/local/bin/helm -n ${fleet_namespace} install --create-namespace --wait fleet-crd fleet/fleet-crd",
-    unless  => "/usr/local/bin/kubectl get -n ${fleet_namespace} deployment fleet-controller 2>/dev/null || /usr/local/bin/helm list -n ${fleet_namespace} | grep fleet-crd",
+    command => "/usr/local/bin/helm --kubeconfig=/etc/rancher/rke2/rke2.yaml -n ${fleet_namespace} install --create-namespace --wait fleet-crd fleet/fleet-crd",
+    unless  => "/usr/local/bin/kubectl --kubeconfig=/etc/rancher/rke2/rke2.yaml get -n ${fleet_namespace} deployment fleet-controller 2>/dev/null || /usr/local/bin/helm --kubeconfig=/etc/rancher/rke2/rke2.yaml list -n ${fleet_namespace} | grep fleet-crd",
     require => Exec['helm_repo_update'],
   }
 
   # Install Fleet only if Fleet isn't already installed
   exec { 'install_fleet':
-    command => "/usr/local/bin/helm -n ${fleet_namespace} install --create-namespace --wait fleet fleet/fleet",
-    unless  => "/usr/local/bin/kubectl get -n ${fleet_namespace} deployment fleet-controller 2>/dev/null || /usr/local/bin/helm list -n ${fleet_namespace} | grep ' fleet '",
+    command => "/usr/local/bin/helm --kubeconfig=/etc/rancher/rke2/rke2.yaml -n ${fleet_namespace} install --create-namespace --wait fleet fleet/fleet",
+    unless  => "/usr/local/bin/kubectl --kubeconfig=/etc/rancher/rke2/rke2.yaml get -n ${fleet_namespace} deployment fleet-controller 2>/dev/null || /usr/local/bin/helm --kubeconfig=/etc/rancher/rke2/rke2.yaml list -n ${fleet_namespace} | grep ' fleet '",
     require => Exec['install_fleet_crds'],
   }
 
@@ -56,6 +56,6 @@ class fleet::install (
   exec { 'fleet_ready':
     command => '/bin/true',
     require => [Exec['check_fleet_installation'], Exec['install_fleet']],
-    onlyif  => "/usr/local/bin/kubectl get -n ${fleet_namespace} deployment fleet-controller 2>/dev/null",
+    onlyif  => "/usr/local/bin/kubectl --kubeconfig=/etc/rancher/rke2/rke2.yaml get -n ${fleet_namespace} deployment fleet-controller 2>/dev/null",
   }
 }

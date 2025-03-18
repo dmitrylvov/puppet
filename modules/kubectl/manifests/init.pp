@@ -1,9 +1,6 @@
-# Create a new module for kubectl
-# modules/kubectl/manifests/init.pp
-
 class kubectl (
   String $version = 'v1.29.4',
-  String $cluster_server = 'agent01.example.com',
+  String $cluster_server = 'agent01',
   Boolean $is_cluster_node = true,
 ) {
   # Download kubectl
@@ -56,6 +53,15 @@ class kubectl (
       owner   => 'root',
       group   => 'root',
       require => [File['/root/.kube'], Exec['wait_for_rke2_kubeconfig']],
+    }
+    
+    # Add KUBECONFIG environment variable
+    file { '/etc/profile.d/kubeconfig.sh':
+      ensure  => 'file',
+      content => 'export KUBECONFIG=/etc/rancher/rke2/rke2.yaml',
+      mode    => '0644',
+      owner   => 'root',
+      group   => 'root',
     }
   }
   else {

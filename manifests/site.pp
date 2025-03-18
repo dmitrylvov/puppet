@@ -17,7 +17,7 @@ node 'agent01.example.com' {
   }
 
   class { 'kubectl':
-    cluster_server => 'agent01.example.com',
+    cluster_server => 'agent01',
     is_cluster_node => true,
     require => Class['rke2::master'],
   }
@@ -96,4 +96,3 @@ node 'agent04.example.com' {
     require    => Class['rke2::install'],
   }
 }
-
