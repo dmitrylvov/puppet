@@ -1,0 +1,12 @@
+helmRepos:
+  - url: https://metallb.github.io/metallb
+helm:
+  chart: metallb/metallb
+  releaseName: metallb
+  version: 0.14.8
+  namespace: metallb-system
+  valuesFiles:
+    - helm/values.yaml
+resources:
+  - resources/ippool.yaml
+  - resources/l2advertisement.yaml

@@ -1,0 +1,17 @@
+image:
+  tag: "v0.8.0"
+
+vip:
+  interface: "eth0"
+  address: "10.0.0.7"
+  enableARP: true
+
+prometheus:
+  enable: true
+  port: 2112
+
+leaderElection:
+  enable: true
+  leaseDuration: "5"
+  renewDeadline: "3"
+  retryPeriod: "1"

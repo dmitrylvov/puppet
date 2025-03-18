@@ -1,0 +1,18 @@
+# modules/fleet_repo/templates/gitrepo.yaml.erb
+apiVersion: fleet.cattle.io/v1alpha1
+kind: GitRepo
+metadata:
+  name: <%= @repo_name %>
+  namespace: <%= @namespace %>
+spec:
+  repo: <%= @repo_url %>
+  branch: <%= @repo_branch %>
+<% if @paths.length > 0 -%>
+  paths:
+<% @paths.each do |path| -%>
+  - <%= path %>
+<% end -%>
+<% end -%>
+<% if @target_namespace != '' -%>
+  targetNamespace: <%= @target_namespace %>
+<% end -%>

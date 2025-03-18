@@ -15,6 +15,32 @@ node 'agent01.example.com' {
     token_content => file('rke2/pre_generated_token.txt'),
     require    => Class['rke2::install'],
   }
+
+  class { 'kubectl':
+    cluster_server => 'agent01.example.com',
+    is_cluster_node => true,
+    require => Class['rke2::master'],
+  }
+
+  class { 'fleet::install':
+    require => Class['kubectl'],
+  }
+
+  class { 'metallb_fleet':
+    git_repo_url => 'https://github.com/dmitrylvov/fleet.git', # Replace with your actual repo URL
+    git_branch   => 'main',
+    require      => Class['fleet::install'],
+  }
+
+  # Install Rancher
+#  class { 'rancher::install':
+#    rancher_hostname => 'rancher.example.com',
+#    rancher_version => 'v2.9.3',
+#    bootstrap_password => 'admin',  # Use a secure password
+#    ingress_ip => '10.0.0.10',               # From your MetalLB pool
+#    replicas => 1,
+#    require => Class['metallb_fleet'],
+#  }
 }
 
 # Main RKE2 Server Node (10.0.0.2)
@@ -70,3 +96,4 @@ node 'agent04.example.com' {
     require    => Class['rke2::install'],
   }
 }
+

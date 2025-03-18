@@ -1,0 +1,8 @@
+defaultNamespace: kube-system
+helm:
+  chart: kube-vip
+  releaseName: kube-vip
+  repo: https://kube-vip.github.io/helm-charts
+  version: 0.6.1
+  valuesFiles:
+    - values.yaml
